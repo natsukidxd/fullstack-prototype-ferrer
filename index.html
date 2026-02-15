@@ -67,14 +67,12 @@
                         placeholder="" />
                     <label for="formId1">Password</label>
                 </div>
-                <span>
-                    <button type="button" class="btn btn-success">
-                        Sign up
-                    </button>
-                    <button type="button" class="btn btn-secondary">
-                        Cancel
-                    </button>
-                </span>
+                <button type="button" class="btn btn-success">
+                    Sign up
+                </button>
+                <button type="button" class="btn btn-secondary">
+                    Cancel
+                </button>
             </form>
         </section>
         <!-- Verification Section-->
@@ -89,43 +87,41 @@
                 </svg> A verification link has sent to .
             </div>
             <p>For demo purposes, click below to simulate verification:</p>
-            <span>
-                <button type="button" class="btn btn-success">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-check-circle" viewBox="0 0 16 16">
-                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                        <path
-                            d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
-                    </svg> Simulate Email Verification
+            <button type="button" class="btn btn-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-check-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path
+                        d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
+                </svg> Simulate Email Verification
+            </button>
+            <button type="button" class="btn btn-secondary">
+                Go to Login
+            </button>
+        </section>
+        <!-- Login Section-->
+        <section id="login-page">
+            <h3>Login</h3>
+            <form action="">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" name="loginEmail" id="loginEmail" placeholder="" />
+                    <label for="formId1">Email</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" name="loginPassword" id="loginPassword"
+                        placeholder="" />
+                    <label for="formId1">Password</label>
+                </div>
+                <button type="button" class="btn btn-primary">
+                    Login
                 </button>
                 <button type="button" class="btn btn-secondary">
-                    Go to Login
+                    Cancel
                 </button>
-            </span>
+            </form>
         </section>
     </main>
-    <verify-email>
-        <section>
-            <!-- SKIP -->
-        </section>
-    </verify-email>
-    <login>
-        <section>
-            <div class="container">
-                <h3>Login</h3>
-                <div class="form-group">
-                    <label for="formGroupExampleInput2">Email</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
-                </div>
-                <div class="form-group">
-                    <label for="formGroupExampleInput2">Password</label>
-                    <input type="password" class="form-control" id="formGroupExampleInput2" placeholder="">
-                </div>
-                <button class="btn btn-outline-success" type="button">Login</button>
-                <button class="btn btn-outline-success" type="button">Cancel</button>
-            </div>
-        </section>
-    </login>
+
     <profile>
         <section>
             <div class="container">
