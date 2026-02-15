@@ -1,41 +1,46 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    </head>
-    <body>
-        <nav class="navbar navbar-dark bg-dark">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Full-Stack App (Student Build)</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
             <span class="navbar-brand mb-0 h1">Full-Stack App (Krist Dave B. Ferrer)</span>
-            <form class="form-inline">
-                <button class="btn btn-outline-success" type="button">Login</button>
-                <button class="btn btn-outline-success" type="button">Register</button>
-            </form>
-        </nav>
-        <main>
-            <section>
-                <div class="container">
-                    <h1>Welcome to Full-Stack App</h1>
-                    <p class="text-start">A static prototype before backend integration. Simulates:</p>
-                    <ul>
-                        <li>Email registration + fake verification</li>
-                        <li>Login with JWT-like token simulation</li>
-                        <li>Role-based UI (Admin/User)</li>
-                        <li>CRUD for Employees, Departments, Request</li>
-                    </ul>
-                    <button class="btn btn-outline-success" type="button">Get Started</button>
-                </div>
-            </section>
-        </main>
-        <register>
-            <section>
-                <div class="container">
-                    <h3>Register Account</h3>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item role-logged-out"><a class="nav-link" href="#">Login</a></li>
+                <li class="nav-item role-logged-out"><a class="nav-link" href="#">Register</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <section>
+            <div class="container">
+                <h1>Welcome to Full-Stack App</h1>
+                <p class="text-start">A static prototype before backend integration. Simulates:</p>
+                <ul>
+                    <li>Email registration + fake verification</li>
+                    <li>Login with JWT-like token simulation</li>
+                    <li>Role-based UI (Admin/User)</li>
+                    <li>CRUD for Employees, Departments, Request</li>
+                </ul>
+                <button class="btn btn-outline-success" type="button">Get Started</button>
+            </div>
+        </section>
+    </main>
+    <register>
+        <section>
+            <div class="container">
+                <h3>Register Account</h3>
                 <form>
                     <div class="form-group">
                         <label for="formGroupExampleInput">First Name</label>
@@ -54,45 +59,48 @@
                         <input type="password" class="form-control" id="formGroupExampleInput2" placeholder="">
                     </div>
                 </form>
+            </div>
+        </section>
+    </register>
+    <verify-email>
+        <section>
+            <!-- SKIP -->
+        </section>
+    </verify-email>
+    <login>
+        <section>
+            <div class="container">
+                <h3>Login</h3>
+                <div class="form-group">
+                    <label for="formGroupExampleInput2">Email</label>
+                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
                 </div>
-            </section>
-        </register>
-        <verify-email>
-            <section>
-                <!-- SKIP -->
-            </section>
-        </verify-email>
-        <login>
-            <section>
-                <div class="container">
-                    <h3>Login</h3>
-                    <div class="form-group">
-                        <label for="formGroupExampleInput2">Email</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="formGroupExampleInput2">Password</label>
-                        <input type="password" class="form-control" id="formGroupExampleInput2" placeholder="">
-                    </div>
-                    <button class="btn btn-outline-success" type="button">Login</button>
-                    <button class="btn btn-outline-success" type="button">Cancel</button>
+                <div class="form-group">
+                    <label for="formGroupExampleInput2">Password</label>
+                    <input type="password" class="form-control" id="formGroupExampleInput2" placeholder="">
                 </div>
-            </section>
-        </login>
-        <profile>
-            <section>
-                <div class="container">
-                    <h3>My Profile</h3>
-                    <h5>Admin User</h5>
-                    <p>
-                        <b>Email: </b>
-                        <b>Role: </b>
-                    </p>
-                    <button class="btn btn-outline-success" type="button">Edit Profile</button>
-                </div>
-            </section>
-        </profile>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-        <script src="/script.js" async defer></script>
-    </body>
+                <button class="btn btn-outline-success" type="button">Login</button>
+                <button class="btn btn-outline-success" type="button">Cancel</button>
+            </div>
+        </section>
+    </login>
+    <profile>
+        <section>
+            <div class="container">
+                <h3>My Profile</h3>
+                <h5>Admin User</h5>
+                <p>
+                    <b>Email: </b>
+                    <b>Role: </b>
+                </p>
+                <button class="btn btn-outline-success" type="button">Edit Profile</button>
+            </div>
+        </section>
+    </profile>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="/script.js" async defer></script>
+</body>
+
 </html>
