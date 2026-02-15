@@ -7,7 +7,7 @@
     <title>Full-Stack App (Student Build)</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
@@ -23,7 +23,8 @@
         </div>
     </nav>
     <main class="container mt-3">
-        <section>
+        <!-- Home Section-->
+        <section id="home-page">
             <h1>Welcome to Full-Stack App</h1>
             <p>A static prototype before backend integration. Simulates:</p>
             <ul>
@@ -43,32 +44,40 @@
                 </svg>
             </button>
         </section>
-    </main>
-    <register>
-        <section>
-            <div class="container">
-                <h3>Register Account</h3>
-                <form>
-                    <div class="form-group">
-                        <label for="formGroupExampleInput">First Name</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="formGroupExampleInput2">Last Name</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="formGroupExampleInput2">Email</label>
-                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="formGroupExampleInput2">Password</label>
-                        <input type="password" class="form-control" id="formGroupExampleInput2" placeholder="">
-                    </div>
-                </form>
-            </div>
+        <!-- Register -->
+        <section id="register-page">
+            <h3>Register Account</h3>
+            <form>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="registerFirstName" id="registerFirstName"
+                        placeholder="" />
+                    <label for="formId1">First Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="registerLastName" id="registerLastName"
+                        placeholder="" />
+                    <label for="formId1">Last Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" name="registerEmail" id="registerEmail" placeholder="" />
+                    <label for="formId1">Email</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" name="registerPassword" id="registerPassword"
+                        placeholder="" />
+                    <label for="formId1">Password</label>
+                </div>
+                <span>
+                    <button type="button" class="btn btn-success">
+                        Sign up
+                    </button>
+                    <button type="button" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                </span>
+            </form>
         </section>
-    </register>
+    </main>
     <verify-email>
         <section>
             <!-- SKIP -->
@@ -107,7 +116,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <script src="/script.js" async defer></script>
+    <script src="script.js" async defer></script>
 </body>
 
 </html>
