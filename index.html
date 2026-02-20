@@ -1,144 +1,380 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Full-Stack App (Student Build)</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-</head>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+  </head>
 
-<body>
+  <body class="not-authenticated">
     <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <span class="navbar-brand mb-0 h1">Full-Stack App (Krist Dave B. Ferrer)</span>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item role-logged-out"><a class="nav-link" href="#">Login</a></li>
-                <li class="nav-item role-logged-out"><a class="nav-link" href="#">Register</a></li>
-            </ul>
+      <div class="container">
+        <a class="navbar-brand" href="#home"
+          >Full-Stack App (Krist Dave B. Ferrer)</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item role-logged-out">
+              <a class="nav-link" href="#register">Register</a>
+            </li>
+            <li class="nav-item role-logged-out">
+              <a class="nav-link" href="#login">Login</a>
+            </li>
+            <li class="nav-item role-logged-in dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                >Profile</a
+              >
+              <ul class="dropdown-menu">
+                <li><a href="#profile" class="dropdown-item">Profile</a></li>
+                <li>
+                  <a href="#profile" class="dropdown-item role-admin"
+                    >Employees</a
+                  >
+                </li>
+                <li>
+                  <a href="#accounts" class="dropdown-item role-admin"
+                    >Accounts</a
+                  >
+                </li>
+                <li>
+                  <a href="#departments" class="dropdown-item role-admin"
+                    >Departments</a
+                  >
+                </li>
+                <li>
+                  <a href="#requests" class="dropdown-item role-admin"
+                    >My Requests</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logout()"
+                    >Logout</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
     <main class="container mt-3">
-        <!-- Home Section-->
-        <section id="home-page">
-            <h1>Welcome to Full-Stack App</h1>
-            <p>A static prototype before backend integration. Simulates:</p>
-            <ul>
-                <li>Email registration + fake verification</li>
-                <li>Login with JWT-like token simulation</li>
-                <li>Role-based UI (Admin/User)</li>
-                <li>CRUD for Employees, Departments, Request</li>
-            </ul>
-            <div class="alert alert-info" role="alert">
-                <b>Note:</b> All data storage is stored in <em class="text-danger">localStorage</em>. Refresh to reset.
-            </div>
-            <button type="button" class="btn btn-primary">
-                Get Started <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                </svg>
-            </button>
-        </section>
-        <!-- Register Section-->
-        <section id="register-page">
-            <h3>Register Account</h3>
-            <form>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="registerFirstName" id="registerFirstName"
-                        placeholder="" />
-                    <label for="formId1">First Name</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="registerLastName" id="registerLastName"
-                        placeholder="" />
-                    <label for="formId1">Last Name</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" name="registerEmail" id="registerEmail" placeholder="" />
-                    <label for="formId1">Email</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control" name="registerPassword" id="registerPassword"
-                        placeholder="" />
-                    <label for="formId1">Password</label>
-                </div>
-                <button type="button" class="btn btn-success">
-                    Sign up
-                </button>
-                <button type="button" class="btn btn-secondary">
-                    Cancel
-                </button>
-            </form>
-        </section>
-        <!-- Verification Section-->
-        <section id="verification-page">
-            <h3>Verify your Email</h3>
-            <div class="alert alert-success" role="alert">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-check-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                    <path
-                        d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
-                </svg> A verification link has sent to .
-            </div>
-            <p>For demo purposes, click below to simulate verification:</p>
-            <button type="button" class="btn btn-success">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-check-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                    <path
-                        d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
-                </svg> Simulate Email Verification
-            </button>
-            <button type="button" class="btn btn-secondary">
-                Go to Login
-            </button>
-        </section>
-        <!-- Login Section-->
-        <section id="login-page">
-            <h3>Login</h3>
-            <form action="">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" name="loginEmail" id="loginEmail" placeholder="" />
-                    <label for="formId1">Email</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control" name="loginPassword" id="loginPassword"
-                        placeholder="" />
-                    <label for="formId1">Password</label>
-                </div>
-                <button type="button" class="btn btn-primary">
-                    Login
-                </button>
-                <button type="button" class="btn btn-secondary">
-                    Cancel
-                </button>
-            </form>
-        </section>
+      <!-- Home Section-->
+      <section id="home-page" class="page">
+        <h1>Welcome to Full-Stack App</h1>
+        <p>A static prototype before backend integration. Simulates:</p>
+        <ul>
+          <li>Email registration + fake verification</li>
+          <li>Login with JWT-like token simulation</li>
+          <li>Role-based UI (Admin/User)</li>
+          <li>CRUD for Employees, Departments, Request</li>
+        </ul>
+        <div class="alert alert-info" role="alert">
+          <b>Note:</b> All data storage is stored in
+          <em class="text-danger">localStorage</em>. Refresh to reset.
+        </div>
+        <button type="button" class="btn btn-primary">
+          Get Started
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-right"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+            />
+          </svg>
+        </button>
+      </section>
+      <!-- Register Section-->
+      <section id="register-page" class="page">
+        <h3>Register Account</h3>
+        <form>
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              name="registerFirstName"
+              id="registerFirstName"
+              placeholder=""
+              required
+            />
+            <label for="formId1">First Name</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              name="registerLastName"
+              id="registerLastName"
+              placeholder=""
+              required
+            />
+            <label for="formId1">Last Name</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              name="registerEmail"
+              id="registerEmail"
+              placeholder=""
+              required
+            />
+            <label for="formId1">Email</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="password"
+              class="form-control"
+              name="registerPassword"
+              id="registerPassword"
+              placeholder=""
+              minlength="6"
+              required
+            />
+            <label for="formId1">Password (min 6)</label>
+          </div>
+          <button type="submit" class="btn btn-success">Sign up</button>
+          <button type="button" class="btn btn-secondary">Cancel</button>
+        </form>
+      </section>
+      <!-- Verification Section-->
+      <section id="verification-page" class="page">
+        <h3>Verify your Email</h3>
+        <div class="alert alert-success" role="alert">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-check-circle"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+            />
+            <path
+              d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"
+            />
+          </svg>
+          A verification link has sent to .
+        </div>
+        <p>For demo purposes, click below to simulate verification:</p>
+        <button
+          type="button"
+          class="btn btn-success"
+          onclick="simulateVerify()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-check-circle"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+            />
+            <path
+              d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"
+            />
+          </svg>
+          Simulate Email Verification
+        </button>
+        <button type="button" class="btn btn-secondary">Go to Login</button>
+      </section>
+      <!-- Login Section-->
+      <section id="login-page" class="page">
+        <h3>Login</h3>
+        <form action="">
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control"
+              name="loginEmail"
+              id="loginEmail"
+              placeholder=""
+              required
+            />
+            <label for="formId1">Email</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input
+              type="password"
+              class="form-control"
+              name="loginPassword"
+              id="loginPassword"
+              placeholder=""
+              required
+            />
+            <label for="formId1">Password</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="button" class="btn btn-secondary">Cancel</button>
+        </form>
+        <div
+          id="loginError"
+          class="alert alert-danger mt-3"
+          style="display: none"
+        ></div>
+      </section>
+      <!-- Profile-->
+      <section id="profile-page" class="page">
+        <h3>My Profile</h3>
+        <div class="shadow-sm">
+          <h5 id="profileName"></h5>
+          <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+          <p><strong>Role:</strong> <span id="profileRole"></span></p>
+          <button
+            class="btn btn-outline-secondary"
+            onclick="alert('Edit profile not implemented yet')"
+          >
+            Edit Profile
+          </button>
+        </div>
+      </section>
+      <!-- Employees-->
+      <section id="employees-page" class="page role-admin">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3>Employees</h3>
+          <button
+            class="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#employeeModal"
+            id="btnAddEmployee"
+          >
+            + Add Employee
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover" id="employeesTable">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Dept</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+      <!-- Departments-->
+      <section id="departments-page" class="page role-admin">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3>Departments</h3>
+          <button
+            class="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#departmentModal"
+            id="btnAddDepartment"
+          >
+            + Add Department
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover" id="departmentsTable">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+      <!-- Accounts-->
+      <section id="accounts-page" class="page role-admin">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3>Accounts</h3>
+          <button
+            class="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#accountModal"
+            id="btnAddDepartment"
+          >
+            + Add Account
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover" id="accountsTable">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Verified</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+      <!-- My Requests-->
+      <section id="requests-page" class="page role-logged-in">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>My Requests</h2>
+          <button
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#newRequestModal"
+          >
+            + New Request
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover" id="requestsTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Items</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
     </main>
-
-    <profile>
-        <section>
-            <div class="container">
-                <h3>My Profile</h3>
-                <h5>Admin User</h5>
-                <p>
-                    <b>Email: </b>
-                    <b>Role: </b>
-                </p>
-                <button class="btn btn-outline-success" type="button">Edit Profile</button>
-            </div>
-        </section>
-    </profile>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
     <script src="script.js" async defer></script>
-</body>
-
+  </body>
 </html>
