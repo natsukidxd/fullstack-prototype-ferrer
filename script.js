@@ -1,6 +1,6 @@
 // Data
 
-const STORAGE_KEY = "fullstack-prototype-ferrer";
+const STORAGE_KEY = "'ipt_demo_v1";
 const AUTH_TOKEN_KEY = "auth_token";
 const UNVERIFIED_EMAIL_KEY = "unverified_email";
 
@@ -77,8 +77,9 @@ function setAuthState(isAuthenticated, user = null) {
     document.body.classList.remove("not-authenticated");
     document.body.classList.add("authenticated");
     document.body.classList.toggle("is-admin", user.role === "admin");
-    document.getElementById("currentUserName").textContent =
-      `${user.firstName} ${user.lastName}`;
+    document.getElementById(
+      "currentUserName"
+    ).textContent = `${user.firstName} ${user.lastName}`;
   } else {
     document.body.classList.remove("authenticated", "is-admin");
     document.body.classList.add("not-authenticated");
@@ -253,7 +254,7 @@ document.getElementById("loginForm")?.addEventListener("submit", (e) => {
   const pass = data.get("loginPassword");
 
   const user = db.accounts.find(
-    (u) => u.email.toLowerCase() === email && u.password === pass && u.verified,
+    (u) => u.email.toLowerCase() === email && u.password === pass && u.verified
   );
 
   if (user) {
@@ -280,12 +281,91 @@ document.getElementById("btnLogout")?.addEventListener("click", (e) => {
 
 function renderProfile() {
   if (!currentUser) return;
-  document.getElementById("profileName").textContent =
-    `${currentUser.firstName} ${currentUser.lastName}`;
+  document.getElementById(
+    "profileName"
+  ).textContent = `${currentUser.firstName} ${currentUser.lastName}`;
   document.getElementById("profileEmail").textContent = currentUser.email;
   document.getElementById("profileRole").textContent =
     currentUser.role.toUpperCase();
 }
+
+// profile edit
+
+function openProfileModal() {
+  if (!currentUser) return;
+
+  const modalEl = document.getElementById("profileModal");
+  const form = document.getElementById("profileForm");
+  if (!modalEl || !form) return;
+
+  form.classList.remove("was-validated");
+  form.reset();
+
+  form.elements.firstName.value = currentUser.firstName || "";
+  form.elements.lastName.value = currentUser.lastName || "";
+  form.elements.email.value = currentUser.email || "";
+  form.elements.password.value = "";
+
+  const modal =
+    bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+  modal.show();
+}
+
+document.getElementById("btnEditProfile")?.addEventListener("click", (e) => {
+  e.preventDefault();
+  openProfileModal();
+});
+
+document.getElementById("btnSaveProfile")?.addEventListener("click", () => {
+  if (!currentUser) return;
+
+  const modalEl = document.getElementById("profileModal");
+  const form = document.getElementById("profileForm");
+  if (!modalEl || !form) return;
+
+  if (!form.checkValidity()) {
+    form.classList.add("was-validated");
+    return;
+  }
+
+  const firstName = form.elements.firstName.value.trim();
+  const lastName = form.elements.lastName.value.trim();
+  const newPassword = form.elements.password.value;
+
+  if (newPassword && newPassword.length < 6) {
+    return showToast("Password must be at least 6 characters", "warning");
+  }
+
+  // Update the account record in db
+  const acc =
+    db.accounts.find((a) => a.id === currentUser.id) ||
+    db.accounts.find(
+      (a) => normalizeEmail(a.email) === normalizeEmail(currentUser.email)
+    );
+  if (!acc) return showToast("Account not found", "danger");
+
+  acc.firstName = firstName;
+  acc.lastName = lastName;
+  if (newPassword) acc.password = newPassword;
+
+  // Keep currentUser in sync
+  currentUser.firstName = firstName;
+  currentUser.lastName = lastName;
+  if (newPassword) currentUser.password = newPassword;
+
+  saveToStorage();
+  renderProfile();
+
+  // Update navbar display name
+  const nameEl = document.getElementById("currentUserName");
+  if (nameEl) nameEl.textContent = `${firstName} ${lastName}`;
+
+  // Close modal
+  const modal = bootstrap.Modal.getInstance(modalEl);
+  modal?.hide();
+
+  showToast("Profile updated", "success");
+});
 
 // request
 
@@ -295,7 +375,7 @@ function renderRequests() {
   tbody.innerHTML = "";
 
   const userReqs = db.requests.filter(
-    (r) => r.employeeEmail === currentUser.email,
+    (r) => r.employeeEmail === currentUser.email
   );
 
   if (userReqs.length === 0) {
@@ -370,7 +450,7 @@ document.getElementById("btnSubmitRequest")?.addEventListener("click", () => {
 
   saveToStorage();
   bootstrap.Modal.getInstance(
-    document.getElementById("newRequestModal"),
+    document.getElementById("newRequestModal")
   ).hide();
   form.reset();
   document.getElementById("itemsContainer").innerHTML = `
@@ -389,6 +469,7 @@ document.getElementById("btnSubmitRequest")?.addEventListener("click", () => {
 function renderAccounts() {
   const tbody = document.querySelector("#accountsTable tbody");
   tbody.innerHTML = "";
+
   db.accounts.forEach((acc) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -397,13 +478,246 @@ function renderAccounts() {
       <td>${acc.role}</td>
       <td>${acc.verified ? "Yes" : "No"}</td>
       <td>
-        <button class="btn btn-sm btn-outline-primary" disabled>Edit</button>
-        <button class="btn btn-sm btn-outline-warning" disabled>Reset PW</button>
-        <button class="btn btn-sm btn-outline-danger" disabled>Delete</button>
+        <button class="btn btn-sm btn-outline-primary btn-edit-acc" data-id="${
+          acc.id
+        }">Edit</button>
+        <button class="btn btn-sm btn-outline-warning btn-reset-acc" data-id="${
+          acc.id
+        }">Reset PW</button>
+        <button class="btn btn-sm btn-outline-danger btn-delete-acc" data-id="${
+          acc.id
+        }">Delete</button>
       </td>
     `;
     tbody.appendChild(tr);
   });
+}
+
+// accounts CRUD
+
+function normalizeEmail(email) {
+  return String(email || "")
+    .trim()
+    .toLowerCase();
+}
+
+function updateEmailReferences(oldEmail, newEmail) {
+  if (!oldEmail || !newEmail || oldEmail === newEmail) return;
+
+  // Update employee records
+  db.employees.forEach((e) => {
+    if (normalizeEmail(e.userEmail) === normalizeEmail(oldEmail)) {
+      e.userEmail = newEmail;
+    }
+  });
+
+  // Update requests ownership
+  db.requests.forEach((r) => {
+    if (normalizeEmail(r.employeeEmail) === normalizeEmail(oldEmail)) {
+      r.employeeEmail = newEmail;
+    }
+  });
+}
+
+function openAccountModal(acc = null) {
+  const modalEl = document.getElementById("accountModal");
+  const modal =
+    bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+  const form = document.getElementById("accountForm");
+
+  form.reset();
+  form.classList.remove("was-validated");
+
+  const pwHint = document.getElementById("accountPwHint");
+  document.getElementById("accountModalLabel").textContent = acc
+    ? "Edit Account"
+    : "Add Account";
+
+  // When adding, password is required; when editing, leave blank to keep.
+  form.elements.password.required = !acc;
+  if (pwHint) pwHint.textContent = acc ? "(leave blank to keep)" : "(min 6)";
+
+  if (acc) {
+    document.getElementById("accountId").value = acc.id;
+    form.elements.firstName.value = acc.firstName || "";
+    form.elements.lastName.value = acc.lastName || "";
+    form.elements.email.value = acc.email || "";
+    form.elements.role.value = acc.role || "employee";
+    form.elements.verified.checked = Boolean(acc.verified);
+  } else {
+    document.getElementById("accountId").value = "";
+    form.elements.role.value = "employee";
+    form.elements.verified.checked = false;
+  }
+
+  modal.show();
+}
+
+document.getElementById("btnAddAccount")?.addEventListener("click", () => {
+  openAccountModal(null);
+});
+
+document.getElementById("btnSaveAccount")?.addEventListener("click", () => {
+  const form = document.getElementById("accountForm");
+  if (!form.checkValidity()) return form.classList.add("was-validated");
+
+  const data = new FormData(form);
+  const id = String(data.get("id") || "");
+  const firstName = String(data.get("firstName") || "").trim();
+  const lastName = String(data.get("lastName") || "").trim();
+  const email = normalizeEmail(data.get("email"));
+  const password = String(data.get("password") || "");
+  const role = String(data.get("role") || "employee");
+  const verified = form.elements.verified.checked;
+
+  // unique email
+  const emailTaken = db.accounts.some(
+    (a) => normalizeEmail(a.email) === email && a.id !== id
+  );
+  if (emailTaken) return showToast("Email already exists", "danger");
+
+  if (!id) {
+    // Create
+    if (password.length < 6)
+      return showToast("Password must be at least 6 characters", "warning");
+
+    db.accounts.push({
+      id: "u" + Date.now(),
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      verified,
+    });
+
+    saveToStorage();
+    renderAccounts();
+    showToast("Account created", "success");
+    forceCloseModalSafe("accountModal");
+    return;
+  }
+
+  // Edit
+  const acc = db.accounts.find((a) => a.id === id);
+  if (!acc) return showToast("Account not found", "danger");
+
+  const oldEmail = acc.email;
+
+  acc.firstName = firstName;
+  acc.lastName = lastName;
+  acc.email = email;
+  acc.role = role;
+  acc.verified = verified;
+
+  if (password.trim()) {
+    if (password.length < 6)
+      return showToast("Password must be at least 6 characters", "warning");
+    acc.password = password;
+  }
+
+  // keep references consistent if email changed
+  updateEmailReferences(oldEmail, email);
+
+  // If editing self, keep auth token in sync
+  if (
+    currentUser &&
+    normalizeEmail(currentUser.email) === normalizeEmail(oldEmail)
+  ) {
+    currentUser = acc;
+    localStorage.setItem(AUTH_TOKEN_KEY, acc.email);
+    document.getElementById(
+      "currentUserName"
+    ).textContent = `${acc.firstName} ${acc.lastName}`;
+    // ensure admin class updates if role changed
+    document.body.classList.toggle("is-admin", acc.role === "admin");
+  }
+
+  saveToStorage();
+  renderAccounts();
+  // If employee modal dropdowns are open later, keep data fresh
+  showToast("Account updated", "success");
+  forceCloseModalSafe("accountModal");
+});
+
+function forceCloseModalSafe(modalId) {
+  const el = document.getElementById(modalId);
+  if (!el) return;
+  const instance = bootstrap.Modal.getInstance(el);
+  if (instance) instance.hide();
+
+  // Cleanup: prevents stuck dark backdrop in edge cases
+  document.body.classList.remove("modal-open");
+  document.querySelectorAll(".modal-backdrop").forEach((b) => b.remove());
+  document.body.style.removeProperty("padding-right");
+}
+
+function resetAccountPassword(accId) {
+  const acc = db.accounts.find((a) => a.id === accId);
+  if (!acc) return showToast("Account not found", "danger");
+
+  const newPw = prompt(`Enter new password for ${acc.email} (min 6 chars):`);
+  if (newPw === null) return; // cancelled
+  if (String(newPw).length < 6)
+    return showToast("Password must be at least 6 characters", "warning");
+
+  acc.password = String(newPw);
+  saveToStorage();
+  showToast("Password updated", "success");
+}
+
+function deleteAccount(accId) {
+  const acc = db.accounts.find((a) => a.id === accId);
+  if (!acc) return showToast("Account not found", "danger");
+
+  if (
+    currentUser &&
+    normalizeEmail(currentUser.email) === normalizeEmail(acc.email)
+  ) {
+    return showToast(
+      "You cannot delete your own account while logged in.",
+      "warning"
+    );
+  }
+
+  // Prevent deleting the last remaining admin (avoid locking the system)
+  if (acc.role === "admin") {
+    const adminCount = db.accounts.filter((a) => a.role === "admin").length;
+    if (adminCount <= 1) {
+      return showToast(
+        "You cannot delete the last remaining admin account.",
+        "warning"
+      );
+    }
+  }
+
+  if (
+    !confirm(
+      `Delete account: ${acc.email}? This will also remove related employee records and requests.`
+    )
+  )
+    return;
+
+  // Remove account
+  db.accounts = db.accounts.filter((a) => a.id !== accId);
+
+  // Cascade delete employee + requests for this email
+  db.employees = db.employees.filter(
+    (e) => normalizeEmail(e.userEmail) !== normalizeEmail(acc.email)
+  );
+  db.requests = db.requests.filter(
+    (r) => normalizeEmail(r.employeeEmail) !== normalizeEmail(acc.email)
+  );
+
+  saveToStorage();
+  renderAccounts();
+  // If currently viewing employees/requests, refresh those tables
+  if (document.getElementById("employees-page")?.classList.contains("active"))
+    renderEmployees();
+  if (document.getElementById("requests-page")?.classList.contains("active"))
+    renderRequests();
+
+  showToast("Account deleted", "info");
 }
 
 // departments CRUD
@@ -417,8 +731,12 @@ function renderDepartments() {
       <td>${dept.name}</td>
       <td>${dept.description || "—"}</td>
       <td>
-        <button class="btn btn-sm btn-outline-primary btn-edit-dept" data-id="${dept.id}">Edit</button>
-        <button class="btn btn-sm btn-outline-danger btn-delete-dept" data-id="${dept.id}">Delete</button>
+        <button class="btn btn-sm btn-outline-primary btn-edit-dept" data-id="${
+          dept.id
+        }">Edit</button>
+        <button class="btn btn-sm btn-outline-danger btn-delete-dept" data-id="${
+          dept.id
+        }">Delete</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -460,7 +778,7 @@ document.getElementById("btnSaveDepartment")?.addEventListener("click", () => {
 
   if (
     db.departments.some(
-      (d) => d.name.toLowerCase() === name.toLowerCase() && d.id !== id,
+      (d) => d.name.toLowerCase() === name.toLowerCase() && d.id !== id
     )
   ) {
     return showToast("Department name already exists", "danger");
@@ -483,7 +801,7 @@ document.getElementById("btnSaveDepartment")?.addEventListener("click", () => {
   saveToStorage();
   renderDepartments();
   bootstrap.Modal.getInstance(
-    document.getElementById("departmentModal"),
+    document.getElementById("departmentModal")
   ).hide();
   showToast(id ? "Department updated" : "Department created", "success");
 });
@@ -524,13 +842,21 @@ function renderEmployees() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${emp.employeeId}</td>
-      <td>${user.firstName || ""} ${user.lastName || ""}<br><small>${emp.userEmail}</small></td>
+      <td>${user.firstName || ""} ${user.lastName || ""}<br><small>${
+      emp.userEmail
+    }</small></td>
       <td>${emp.position}</td>
       <td>${dept.name || "—"}</td>
-      <td>${emp.hireDate ? new Date(emp.hireDate).toLocaleDateString() : "—"}</td>
+      <td>${
+        emp.hireDate ? new Date(emp.hireDate).toLocaleDateString() : "—"
+      }</td>
       <td>
-        <button class="btn btn-sm btn-outline-primary btn-edit-emp" data-id="${emp.id}">Edit</button>
-        <button class="btn btn-sm btn-outline-danger btn-delete-emp" data-id="${emp.id}">Delete</button>
+        <button class="btn btn-sm btn-outline-primary btn-edit-emp" data-id="${
+          emp.id
+        }">Edit</button>
+        <button class="btn btn-sm btn-outline-danger btn-delete-emp" data-id="${
+          emp.id
+        }">Delete</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -604,6 +930,21 @@ document.getElementById("btnSaveEmployee")?.addEventListener("click", () => {
 
 document.addEventListener("click", (e) => {
   const t = e.target;
+
+  // Accounts
+  if (t.classList.contains("btn-edit-acc")) {
+    const id = t.dataset.id;
+    const acc = db.accounts.find((a) => a.id === id);
+    if (acc) openAccountModal(acc);
+  }
+  if (t.classList.contains("btn-reset-acc")) {
+    const id = t.dataset.id;
+    resetAccountPassword(id);
+  }
+  if (t.classList.contains("btn-delete-acc")) {
+    const id = t.dataset.id;
+    deleteAccount(id);
+  }
 
   // Departments
   if (t.classList.contains("btn-edit-dept")) {
