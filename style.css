@@ -16,3 +16,9 @@ body.authenticated .role-logged-out {
 body.is-admin .role-admin {
   display: block;
 }
+.toast-container {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 1090;
+}
