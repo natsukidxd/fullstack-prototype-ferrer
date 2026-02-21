@@ -481,7 +481,7 @@ function renderAccounts() {
         <button class="btn btn-sm btn-outline-primary btn-edit-acc" data-id="${
           acc.id
         }">Edit</button>
-        <button class="btn btn-sm btn-outline-warning btn-reset-acc" data-id="${
+        <button class="btn btn-sm btn-outline-warning btn-reset-pw" data-id="${
           acc.id
         }">Reset PW</button>
         <button class="btn btn-sm btn-outline-danger btn-delete-acc" data-id="${
@@ -552,7 +552,41 @@ function openAccountModal(acc = null) {
 
   modal.show();
 }
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-reset-pw")) {
+    const id = e.target.dataset.id;
 
+    document.getElementById("resetAccountId").value = id;
+    document.getElementById("resetNewPassword").value = "";
+
+    const modal = new bootstrap.Modal(
+      document.getElementById("resetPasswordModal")
+    );
+    modal.show();
+  }
+});
+document
+  .getElementById("btnConfirmResetPassword")
+  ?.addEventListener("click", () => {
+    const id = document.getElementById("resetAccountId").value;
+    const newPass = document.getElementById("resetNewPassword").value.trim();
+
+    if (newPass.length < 6) {
+      return showToast("Password must be at least 6 characters", "warning");
+    }
+
+    const acc = db.accounts.find((a) => a.id === id);
+    if (!acc) return;
+
+    acc.password = newPass;
+    saveToStorage();
+
+    bootstrap.Modal.getInstance(
+      document.getElementById("resetPasswordModal")
+    ).hide();
+
+    showToast("Password reset successfully", "success");
+  });
 document.getElementById("btnAddAccount")?.addEventListener("click", () => {
   openAccountModal(null);
 });
